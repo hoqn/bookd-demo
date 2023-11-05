@@ -13,6 +13,7 @@ export default function Header({ className, title = "ComcreteUtopia DEMO", subti
         <Link className="transition italic hover:opacity-80 active:opacity-50" to="/">
           {title}
         </Link>
+        {subtitle && <p>{subtitle}</p>}
       </div>
     </div>
   )

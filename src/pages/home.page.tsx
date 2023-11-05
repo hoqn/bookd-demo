@@ -1,14 +1,14 @@
+import bookService from "@/api/book.service";
 import FormColumn from "@/components/form/form-col";
-import MainLayout from "./main.layout";
 import ScrapCard from "@/components/scrap/scrap-card";
-import { UserScrap, UserScrapDraft } from "@/types/user-lib.types";
-import { FormEventHandler, MouseEventHandler, useCallback, useMemo, useState } from "react";
-import { useUserScrapStore } from "@/stores/user-lib";
-import { useForm, Controller } from "react-hook-form";
 import StepHead from "@/components/steps/step-head";
 import Button from "@/components/ui/button";
+import { useUserScrapStore } from "@/stores/user-lib";
+import { UserScrapDraft } from "@/types/user-lib.types";
 import { useQuery } from "@tanstack/react-query";
-import bookService from "@/api/book.service";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import MainLayout from "./main.layout";
 
 function BookSelectSection() {
   const {
@@ -28,7 +28,6 @@ function BookSelectSection() {
     data: searchResult,
     isLoading,
     isPending,
-    isSuccess,
   } = useQuery({
     queryKey: ["book-search", searchQuery],
     queryFn: () => bookService.searchByTitle(searchQuery!),
