@@ -1,4 +1,4 @@
-import ApiClient, { handleError } from "./core";
+import ApiClient from "./core";
 import { BookDetailResponse, BookSearchByTitleResponse } from "./types/book.res";
 
 class BookService extends ApiClient {
@@ -6,7 +6,7 @@ class BookService extends ApiClient {
     super();
   }
 
-  @handleError
+  // @handleError
   public async searchByTitle(title: string) {
     return this.baseClient
       .get<BookSearchByTitleResponse>(`/search/${title}`)

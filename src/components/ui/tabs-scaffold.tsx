@@ -11,7 +11,7 @@ type TabsScaffoldProps<TabValue extends string> = {
 }
 
 export default function TabsScaffold<T extends string>({ defaultTabValue, tabData, ...restProps }: TabsScaffoldProps<T>) {
-  return <Tabs.Root className="" defaultValue={defaultTabValue}>
+  return <Tabs.Root className="" defaultValue={defaultTabValue} {...restProps}>
     <Tabs.List className="flex flex-row px-2 justify-center">
       {
         tabData.map(({ displayValue, tabValue }) => (

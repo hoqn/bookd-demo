@@ -1,18 +1,8 @@
-import FormColumn from "@/components/form/form-col";
-import ScrapCard from "@/components/scrap/scrap-card";
 import BookSelectSection from "@/components/steps/book-select.section";
-import StepHead from "@/components/steps/step-head";
-import Button from "@/components/ui/button";
-import { useUserScrapStore } from "@/stores/user-lib";
-import { UserScrapDraft } from "@/types/user-lib.types";
-import { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import MainLayout from "./main.layout";
-import StepScaffold from "@/components/steps/step-scaffold";
-import QuestionGenSection from "@/components/steps/question-generation.section";
-import ImageGenSection from "@/components/steps/img-generation.section";
 import ScrapListSection from "@/components/steps/scrap-list.section";
+import Button from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import MainLayout from "./main.layout";
 
 export default function HomePage() {
   return (

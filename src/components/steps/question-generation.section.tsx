@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import StepScaffold from "./step-scaffold";
 import LoadingIndicator from "../ui/loading-indicator";
+import StepScaffold from "./step-scaffold";
 
 type UserQuestion = {
   setId: number;
@@ -34,7 +34,7 @@ export default function QuestionGenSection() {
   const {
     data: questions,
     isLoading,
-    isPending,
+    // isPending,
   } = useQuery({
     queryKey: ["gen-q"],
     queryFn: async () =>
@@ -55,7 +55,8 @@ export default function QuestionGenSection() {
       ) : (
         <div>
           <ul className="divide-y">
-            {mockQuestions.map(({ setId, stackNum, question, answer }) => (
+            {/* {mockQuestions.map(({ setId, stackNum, question, answer }) => ( */}
+            {questions?.map(({ question, answer }) => (
               <li className="py-4">
                 <div className="mb-4 before:content-['Q.'] before:font-bold before:text-lg before:mr-2">{question}</div>
                 <div className="before:content-['A.'] before:font-bold before:text-lg before:mr-2">{answer}</div>

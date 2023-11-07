@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance } from "axios";
 
 const BASE_URL = "/api"; //TODO: proxy 서버 구성으로 임시로 해놓음
 
@@ -6,7 +6,7 @@ const BASE_URL = "/api"; //TODO: proxy 서버 구성으로 임시로 해놓음
 
 function handleError<This, Args extends any[], Return extends Promise<any>>(
   target: (this: This, ...args: Args) => Return,
-  context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+  // context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
 ) {
   return function (this: This, ...args: Args): Return {
     const result = target.call(this, ...args);

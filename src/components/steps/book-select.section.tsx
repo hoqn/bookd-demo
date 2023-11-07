@@ -1,14 +1,13 @@
-import { useForm } from "react-hook-form";
-import StepHead from "./step-head";
-import Button from "../ui/button";
-import { useCallback, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import bookService from "@/api/book.service";
-import TabsScaffold from "../ui/tabs-scaffold";
-import { useDialog } from "../ui/dialog";
-import LoadingIndicator from "../ui/loading-indicator";
 import { useUserBookStore } from "@/stores/user-lib";
 import { UserBook } from "@/types/user-lib.types";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import Button from "../ui/button";
+import { useDialog } from "../ui/dialog";
+import LoadingIndicator from "../ui/loading-indicator";
+import TabsScaffold from "../ui/tabs-scaffold";
 import StepScaffold from "./step-scaffold";
 
 export default function BookSelectSection() {
@@ -109,7 +108,7 @@ function BookDetailSection() {
  * 제목으로 책 검색
  */
 function SearchByTitleSection() {
-  const { userBook, setUserBook } = useUserBookStore();
+  const { setUserBook } = useUserBookStore();
 
   const { handleSubmit, register } = useForm<{
     searchQuery: string;

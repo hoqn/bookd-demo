@@ -10,8 +10,8 @@ interface UseDialogOptions {
 
 export function useDialog({ withScaffold = true }: UseDialogOptions = {}) {
   const [open, setOpen] = useState<boolean>(false);
-  const [onClickPositiveButton, setOnClickPositiveButton] = useState<MouseEventHandler<HTMLButtonElement>>();
-  const [onClickNegativeButton, setOnClickNegativeButton] = useState<MouseEventHandler<HTMLButtonElement>>();
+  const [_, setOnClickPositiveButton] = useState<MouseEventHandler<HTMLButtonElement>>();
+  const [__, setOnClickNegativeButton] = useState<MouseEventHandler<HTMLButtonElement>>();
 
   const ChildrenWrapper = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => (
     <div ref={ref} className={twMerge("rounded-lg shadow-lg bg-slate-100 m-4")}>

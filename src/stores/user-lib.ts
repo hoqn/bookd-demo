@@ -26,7 +26,7 @@ interface UserBookStore {
   setUserBook(userBook: UserBook | null): void;
 }
 
-export const useUserBookStore = create<UserBookStore>((set, get) => ({
+export const useUserBookStore = create<UserBookStore>((set) => ({
   userBook: null,
   setUserBook(userBook) {
     set({ userBook });
