@@ -1,4 +1,4 @@
-import { UserScrap, UserScrapDraft } from "@/types/user-lib.types";
+import { UserBook, UserScrap, UserScrapDraft } from "@/types/user-lib.types";
 import { create } from "zustand";
 
 interface UserScrapStore {
@@ -19,4 +19,16 @@ export const useUserScrapStore = create<UserScrapStore>((set, get) => ({
   deleteUserScrap: (id: number) => set({ userScraps: get().userScraps.filter((value) => value.id !== id) }),
   __userScrapIdCursor: 0,
 
+} as const));
+
+interface UserBookStore {
+  userBook: UserBook | null;
+  setUserBook(userBook: UserBook | null): void;
+}
+
+export const useUserBookStore = create<UserBookStore>((set, get) => ({
+  userBook: null,
+  setUserBook(userBook) {
+    set({ userBook });
+  },
 } as const));

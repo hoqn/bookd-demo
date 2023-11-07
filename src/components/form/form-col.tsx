@@ -24,13 +24,14 @@ export default function FormColumn<Values extends {}>(props: UseControllerProps<
 
   return (
     <div className={twMerge("flex flex-col", className)} {...restProps}>
-      <div className="pb-2">
+      <div className="pb-2 relative">
         <label className="font-bold text-lg" htmlFor={name}>
           {title}
         </label>
         {/* {description && <span>
           {description}
         </span>} */}
+        {fieldState.error?.type === "required" && <div className="absolute bottom-2 right-0 text-sm text-red-700">여긴 반드시 입력해주셔야 해요</div>}
       </div>
       <textarea className={twMerge($textarea.default, fieldState.error && $textarea.onError)} placeholder={description} {...field} />
     </div>

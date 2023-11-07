@@ -7,4 +7,10 @@ interface UserScrapDraft {
   memo: string;
 }
 
-export type { UserScrap, UserScrapDraft };
+interface UserBook {
+  isbn: string;
+  title: string;
+  authors: string;
+}
+
+export type { UserScrap, UserScrapDraft, UserBook };

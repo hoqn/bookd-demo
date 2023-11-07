@@ -1,47 +1,21 @@
-import ApiClient from "./core";
-
-interface BookSearchByTitleResponse {
-  "response": {
-    "request": {
-      "pageNo": number,
-      "pageSize": number,
-      "title": string,
-    },
-    "docs": {
-      "doc": {
-        "publication_year": string,
-        "vol": string[],
-        "bookImageURL": string,
-        "isbn13": string,
-        "publisher": string,
-        "bookDtlUrl": string,
-        "loan_count": number,
-        "bookname": string,
-        "authors": string,
-      }[] | {
-        "publication_year": string,
-        "vol": string[],
-        "bookImageURL": string,
-        "isbn13": string,
-        "publisher": string,
-        "bookDtlUrl": string,
-        "loan_count": number,
-        "bookname": string,
-        "authors": string,
-      }
-    } | "",
-    "numFound": number,
-  }
-}
+import ApiClient, { handleError } from "./core";
+import { BookDetailResponse, BookSearchByTitleResponse } from "./types/book.res";
 
 class BookService extends ApiClient {
   constructor() {
     super();
   }
 
+  @handleError
   public async searchByTitle(title: string) {
     return this.baseClient
       .get<BookSearchByTitleResponse>(`/search/${title}`)
+      .then(res => res.data);
+  }
+
+  public async getBookDetail(isbn: string) {
+    return this.baseClient
+      .get<BookDetailResponse>(`/book/${isbn}`)
       .then(res => res.data);
   }
 }

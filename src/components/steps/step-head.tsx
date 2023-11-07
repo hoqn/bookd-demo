@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface StepHeadProps extends BaseProps, PropsWithChildren {
-  stepIndex: number;
+  stepIndex: number | string;
   stepTitle: string;
 }
 
