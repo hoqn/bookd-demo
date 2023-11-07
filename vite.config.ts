@@ -5,6 +5,10 @@ import viteTsconfigPaths from "vite-tsconfig-paths"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), viteTsconfigPaths()],
+  optimizeDeps: {
+    // https://github.com/radix-ui/primitives/discussions/1915
+    include: ["react-dom"],
+  },
   server: {
     proxy: {
       "/api": {
