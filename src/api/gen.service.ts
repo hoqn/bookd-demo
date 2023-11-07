@@ -13,6 +13,6 @@ class GenService extends ApiClient {
       });
   }
 
-  public async 
+  // public async 
 
 }

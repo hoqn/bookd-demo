@@ -6,10 +6,10 @@ class DiaryService extends ApiClient {
     super();
   }
 
-  public async addScrap() {
+  public async addScrap(dto: UserScrapDto) {
     return this.baseClient
       .post("/diary/scrap", {
-        content
+        ...dto
       } satisfies UserScrapDto)
   }
 }
