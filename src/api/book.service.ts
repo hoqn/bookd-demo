@@ -7,9 +7,9 @@ class BookService extends ApiClient {
   }
 
   // @handleError
-  public async searchByTitle(title: string) {
+  public async searchByTitle(title: string, pageNo: number) {
     return this.baseClient
-      .get<BookSearchByTitleResponse>(`/search/${title}`)
+      .get<BookSearchByTitleResponse>(`/search/${title}/${pageNo}`)
       .then(res => res.data);
   }
 

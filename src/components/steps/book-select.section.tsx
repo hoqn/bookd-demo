@@ -1,8 +1,8 @@
 import bookService from "@/api/book.service";
 import { useUserBookStore } from "@/stores/user-lib";
 import { UserBook } from "@/types/user-lib.types";
-import { useQuery } from "@tanstack/react-query";
-import { useCallback, useMemo, useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../ui/button";
 import { useDialog } from "../ui/dialog";
@@ -128,10 +128,20 @@ function SearchByTitleSection() {
     data: searchResult,
     isLoading,
     isPending,
-  } = useQuery({
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["book-search", searchQuery],
-    queryFn: () => bookService.searchByTitle(searchQuery!),
+    queryFn: ({ pageParam = 1 }) => bookService.searchByTitle(searchQuery!, pageParam),
+    getNextPageParam: (lastPage, __, lastPageParam) => {
+      return typeof lastPage.response.docs !== "string" && Array.isArray(lastPage.response.docs?.doc)
+        ? lastPageParam + 1
+        : null;
+    },
+    getPreviousPageParam: (_, __, firstPageParam) => (firstPageParam > 1 ? firstPageParam - 1 : null),
     enabled: !!searchQuery,
+    initialPageParam: 1,
   });
 
   const { Component: Dialog, setOpen } = useDialog();
@@ -142,6 +152,32 @@ function SearchByTitleSection() {
   }, []);
 
   const [selectedBook, setSelectedBook] = useState<UserBook | null>(null);
+
+  const lastItem = useRef<HTMLDivElement>(null);
+
+  const intersectionObserver = useRef(
+    new IntersectionObserver(([entry]) => {
+      console.log(entry.intersectionRatio);
+      if (entry.isIntersecting) {
+        console.log("Detecting!");
+        fetchNextPage();
+      }
+    })
+  );
+
+  useEffect(() => {
+    if (!!lastItem?.current) {
+      intersectionObserver.current.observe(lastItem.current);
+      console.log("Observe", lastItem.current);
+    }
+
+    return () => {
+      if (!!lastItem?.current) {
+        intersectionObserver.current.unobserve(lastItem.current);
+        console.log("unObserve", lastItem.current);
+      }
+    };
+  }, [searchResult]);
 
   return (
     <>
@@ -187,30 +223,41 @@ function SearchByTitleSection() {
       ) : (
         !isPending && (
           <>
-            <div className="my-4">총 {searchResult?.response.numFound}개의 책이 검색되었어요.</div>
+            <div className="my-4">총 {searchResult?.pages[0].response.numFound}개의 책이 검색되었어요.</div>
             <ul className="card overflow-hidden -mx-2 divide-y max-h-[32rem] overflow-y-auto">
-              {searchResult?.response.docs &&
-                (Array.isArray(searchResult.response.docs.doc)
-                  ? searchResult.response.docs.doc
-                  : [searchResult.response.docs.doc]
-                ).map((data) => (
-                  <li
-                    key={data.isbn13}
-                    className="flex p-4 border-slate-300 cursor-pointer active:bg-slate-300 transition"
-                    onClick={() =>
-                      handleOnItemClick({ isbn: data.isbn13, title: data.bookname, authors: data.authors })
-                    }
-                  >
-                    <div className="flex-0 mr-4">
-                      <img width={72} height={96} className="rounded-lg shadow" src={data.bookImageURL} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-bold text-lg">{data.bookname}</div>
-                      <div className="font-normal text-sm">{data.authors}</div>
-                      <div className="font-normal text-xs mt-2 opacity-50">{data.isbn13}</div>
-                    </div>
-                  </li>
-                ))}
+              {searchResult?.pages.map(
+                (page) =>
+                  page.response?.docs &&
+                  (Array.isArray(page.response.docs.doc) ? page.response.docs.doc : [page.response.docs.doc]).map(
+                    (data) => (
+                      <li
+                        key={data.isbn13}
+                        className="flex p-4 border-slate-300 cursor-pointer active:bg-slate-300 transition"
+                        onClick={() =>
+                          handleOnItemClick({ isbn: data.isbn13, title: data.bookname, authors: data.authors })
+                        }
+                      >
+                        <div className="flex-0 mr-4">
+                          <img width={72} height={96} className="rounded-lg shadow" src={data.bookImageURL} />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-bold text-lg">{data.bookname}</div>
+                          <div className="font-normal text-sm">{data.authors}</div>
+                          <div className="font-normal text-xs mt-2 opacity-50">{data.isbn13}</div>
+                        </div>
+                      </li>
+                    )
+                  )
+              )}
+              {isFetchingNextPage ? (
+                <div className="flex items-center justify-center py-2">
+                  <LoadingIndicator />
+                </div>
+              ) : hasNextPage ? (
+                <div className="h-8" ref={lastItem} />
+              ) : (
+                <div className="p-2 text-sm opacity-50 text-center">목록의 끝이에요.</div>
+              )}
             </ul>
           </>
         )
