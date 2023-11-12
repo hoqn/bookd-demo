@@ -7,6 +7,8 @@ import StepScaffold from "./step-scaffold";
 import { useDialog } from "../ui/dialog";
 import Button from "../ui/button";
 import ScrapCard from "../scrap/scrap-card";
+import { useNavigate } from "react-router-dom";
+import { GetImagePageState } from "@/pages/gen-image.page";
 
 interface AddScrapFormInputs extends UserScrapDraft {}
 
@@ -16,6 +18,8 @@ export default function ScrapListSection() {
   const { Component: Dialog, setOpen } = useDialog();
 
   const { handleSubmit, control, reset } = useForm<AddScrapFormInputs>();
+
+  const navigate = useNavigate();
 
   const handleOnSubmit = useMemo(
     () =>
@@ -51,7 +55,9 @@ export default function ScrapListSection() {
         </form>
       </Dialog>
       <div className="text-right pb-4">
-        <Button tint="primary" onClick={() => setOpen(true)}>새로운 스크랩 추가</Button>
+        <Button tint="primary" onClick={() => setOpen(true)}>
+          새로운 스크랩 추가
+        </Button>
       </div>
       {/* 스크랩 목록 */}
       <div className="space-y-4">
@@ -62,6 +68,13 @@ export default function ScrapListSection() {
             data={data}
             onDeleteButtonClick={() => {
               deleteUserScrap(data.id);
+            }}
+            onImageGenButtonClick={() => {
+              navigate("/images", {
+                state: {
+                  scrapId: data.id,
+                } satisfies GetImagePageState,
+              });
             }}
           />
         ))}

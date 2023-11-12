@@ -22,7 +22,7 @@ export const useUserScrapStore = create(persist<UserScrapStore>((set, get) => ({
 
 }), {
   name: "user-scrap",
-  storage: createJSONStorage(() => sessionStorage),
+  storage: createJSONStorage(() => localStorage),
 }));
 
 interface UserBookStore {
