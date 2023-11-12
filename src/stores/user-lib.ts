@@ -1,5 +1,6 @@
 import { UserBook, UserScrap, UserScrapDraft } from "@/types/user-lib.types";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface UserScrapStore {
   userScraps: UserScrap[];
@@ -8,7 +9,7 @@ interface UserScrapStore {
   __userScrapIdCursor: number;
 }
 
-export const useUserScrapStore = create<UserScrapStore>((set, get) => ({
+export const useUserScrapStore = create(persist<UserScrapStore>((set, get) => ({
 
   // 스크랩
   userScraps: [] as UserScrap[],
@@ -19,16 +20,22 @@ export const useUserScrapStore = create<UserScrapStore>((set, get) => ({
   deleteUserScrap: (id: number) => set({ userScraps: get().userScraps.filter((value) => value.id !== id) }),
   __userScrapIdCursor: 0,
 
-} as const));
+}), {
+  name: "user-scrap",
+  storage: createJSONStorage(() => sessionStorage),
+}));
 
 interface UserBookStore {
   userBook: UserBook | null;
   setUserBook(userBook: UserBook | null): void;
 }
 
-export const useUserBookStore = create<UserBookStore>((set) => ({
+export const useUserBookStore = create(persist<UserBookStore>((set) => ({
   userBook: null,
   setUserBook(userBook) {
     set({ userBook });
   },
-} as const));
+}), {
+  name: "user-book",
+  storage: createJSONStorage(() => localStorage),
+}));
