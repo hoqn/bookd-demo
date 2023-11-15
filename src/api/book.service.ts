@@ -1,5 +1,5 @@
 import ApiClient from "./core";
-import { BookDetailResponse, BookSearchByTitleResponse } from "./types/book.res";
+import { BookDetailResponse, BookSearchByTitleResponse } from "./types/book.dto";
 
 class BookService extends ApiClient {
   constructor() {
